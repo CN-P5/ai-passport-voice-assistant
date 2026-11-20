@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>AiPassportVoice.App</RootNamespace>
+    <AssemblyName>AiPassportVoice</AssemblyName>
+    <Product>AI Passport 语音助手</Product>
+    <AssemblyTitle>AI Passport 语音助手</AssemblyTitle>
+    <Description>AI Passport 硬件「语音」功能的 Windows 转发客户端：UDP 接收按键与音频，注入输入法热键并路由到 VB-CABLE。</Description>
+    <Authors>CN-P5</Authors>
+    <Company>CN-P5</Company>
+    <Copyright>Copyright © 2026 CN-P5</Copyright>
+    <Version>0.1.0</Version>
+    <FileVersion>0.1.0.0</FileVersion>
+    <InformationalVersion>0.1.0</InformationalVersion>
+    <RepositoryUrl>https://github.com/CN-P5/ai-passport-voice-assistant</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Resource Include="Assets\app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AiPassportVoice.Core\AiPassportVoice.Core.csproj" />
+    <ProjectReference Include="..\AiPassportVoice.Interop\AiPassportVoice.Interop.csproj" />
+  </ItemGroup>
+</Project>

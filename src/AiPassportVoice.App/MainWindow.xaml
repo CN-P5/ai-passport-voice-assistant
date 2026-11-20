@@ -1,0 +1,302 @@
+<Window x:Class="AiPassportVoice.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AI Passport 语音助手"
+        Width="430" Height="800" MaxHeight="1040"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="CanMinimize"
+        Icon="Assets/app.ico"
+        FontFamily="Microsoft YaHei UI, Segoe UI"
+        TextOptions.TextFormattingMode="Display">
+
+    <Window.Resources>
+        <Style x:Key="CaptionButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource Text2Brush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="Transparent" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource CardBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border CornerRadius="8" Background="{DynamicResource BgBrush}"
+            BorderBrush="{DynamicResource BorderBrush1}" BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.35" Color="Black"/>
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Background="Transparent" MouseLeftButtonDown="OnTitleBarDrag">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0">
+                    <Border Width="24" Height="24" CornerRadius="6" Background="{DynamicResource AccentBgBrush}">
+                        <Path Data="M12,3 C10.3,3 9,4.3 9,6 L9,11 C9,12.7 10.3,14 12,14 C13.7,14 15,12.7 15,11 L15,6 C15,4.3 13.7,3 12,3 Z M6,11 C6,14.3 8.7,17 12,17 C15.3,17 18,14.3 18,11 M12,17 L12,21"
+                              Stroke="{DynamicResource AccentBrush}" StrokeThickness="1.6" StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round" Fill="Transparent" Stretch="Uniform" Margin="4"/>
+                    </Border>
+                    <TextBlock Text="AI Passport 语音助手" FontSize="13" FontWeight="Medium"
+                               Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" Margin="9,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,6,0">
+                    <Button Content="▾" Style="{StaticResource CaptionButtonStyle}" Click="OnHideToTray"
+                            ToolTip="最小化到托盘"/>
+                    <Button Content="—" Style="{StaticResource CaptionButtonStyle}" Click="OnMinClick"
+                            ToolTip="最小化"/>
+                    <Button Content="✕" Style="{StaticResource CaptionButtonStyle}" Click="OnCloseClick"
+                            ToolTip="关闭"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <StackPanel x:Name="MainPanel" Margin="14,14,14,6" VerticalAlignment="Top">
+                        <Border Background="{DynamicResource WarnBgBrush}" BorderBrush="{DynamicResource WarnBrush}"
+                                BorderThickness="0.5" CornerRadius="10" Padding="11,11" Margin="0,0,0,10"
+                                Visibility="{Binding CableAlertVisible, Converter={StaticResource BoolToVis}}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="18" Height="18" CornerRadius="9" BorderBrush="{DynamicResource WarnBrush}"
+                                        BorderThickness="1.2" VerticalAlignment="Top" Margin="0,1,10,0">
+                                    <TextBlock Text="!" FontSize="11" FontWeight="Medium" Foreground="{DynamicResource WarnBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="未检测到虚拟声卡 VB-CABLE" FontSize="13" FontWeight="Medium"
+                                               Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding CableAlertText}" Style="{StaticResource HintStyle}" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="8,0,0,0">
+                                    <Button Content="下载" Style="{StaticResource MinorButtonStyle}" Click="OnDownloadCable"/>
+                                    <Button Content="重新检测" Style="{StaticResource LinkButtonStyle}" Click="OnRecheck" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Ellipse Width="9" Height="9" VerticalAlignment="Center" Margin="0,0,12,0">
+                                    <Ellipse.Style>
+                                        <Style TargetType="Ellipse">
+                                            <Setter Property="Fill" Value="{DynamicResource Text3Brush}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                                    <Setter Property="Fill" Value="{DynamicResource OkBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{Binding StatusText}" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextBrush}"/>
+                                    <TextBlock Text="{Binding StatusSub}" FontSize="12" Foreground="{DynamicResource Text2Brush}"
+                                               TextTrimming="CharacterEllipsis" Margin="0,3,0,0"/>
+                                </StackPanel>
+                                <Button Grid.Column="2" Content="{Binding DisconnectText}" Style="{StaticResource MinorButtonStyle}"
+                                        VerticalAlignment="Center" Click="OnToggle"/>
+                            </Grid>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                            <StackPanel>
+                                <Grid>
+                                    <TextBlock Text="语音按键" Style="{StaticResource CardTitleStyle}"/>
+                                    <Button Content="修改热键" Style="{StaticResource LinkButtonStyle}" HorizontalAlignment="Right" Click="OnEditHotkey"/>
+                                </Grid>
+                                <Border x:Name="KeycapBox" Height="42" CornerRadius="8" Background="{DynamicResource CaphBrush}"
+                                        BorderBrush="{DynamicResource BorderBrush2}" BorderThickness="0.5" Margin="0,10,0,10"
+                                        Cursor="Hand" MouseLeftButtonDown="OnEditHotkey">
+                                    <TextBlock x:Name="KeycapText" FontSize="13" FontWeight="Medium"
+                                               Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <Border Background="{DynamicResource ElevBrush}" BorderBrush="{DynamicResource BorderBrush1}"
+                                        BorderThickness="0.5" CornerRadius="8" Padding="2">
+                                    <UniformGrid Rows="1">
+                                        <RadioButton x:Name="HoldRadio" Content="按住说话" GroupName="mode_main"
+                                                     Style="{StaticResource SegRadioStyle}"
+                                                     IsChecked="{Binding IsHoldMode, Mode=OneWay}" Checked="OnModeChanged"/>
+                                        <RadioButton x:Name="TapRadio" Content="点击切换" GroupName="mode_main"
+                                                     Style="{StaticResource SegRadioStyle}"
+                                                     IsChecked="{Binding IsTapMode, Mode=OneWay}" Checked="OnModeChanged"/>
+                                    </UniformGrid>
+                                </Border>
+                                <TextBlock Text="需与输入法的语音快捷键一致；组合键支持 Ctrl / Alt / Shift / Win"
+                                           Style="{StaticResource HintStyle}" Margin="0,10,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                            <StackPanel>
+                                <Grid>
+                                    <TextBlock Text="音频输出" Style="{StaticResource CardTitleStyle}"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <Button Content="重新检测" Style="{StaticResource LinkButtonStyle}" Click="OnRecheck"/>
+                                        <TextBlock Text="·" FontSize="11" Foreground="{DynamicResource Text3Brush}"
+                                                   Margin="7,0" VerticalAlignment="Center"/>
+                                        <Button Content="测试" Style="{StaticResource LinkButtonStyle}" Click="OnTestAudio"/>
+                                    </StackPanel>
+                                </Grid>
+                                <ComboBox Style="{StaticResource FieldComboStyle}" Margin="0,10,0,10"
+                                          ItemsSource="{Binding AudioDevices}" SelectedItem="{Binding SelectedDevice}"/>
+                                <ItemsControl ItemsSource="{Binding MeterLevels}" Height="36" Margin="0,0,0,10">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <UniformGrid Rows="1"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Width="5" Height="{Binding}" CornerRadius="2.5"
+                                                    Background="{DynamicResource OkBrush}" Margin="2,0"
+                                                    VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <TextBlock Text="输入法麦克风请选「CABLE Output」；未安装 VB-CABLE 时不可用"
+                                           Style="{StaticResource HintStyle}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <Grid>
+                                    <TextBlock Text="运行日志" Style="{StaticResource CardTitleStyle}"/>
+                                    <Button x:Name="LogToggle" Content="展开" Style="{StaticResource LinkButtonStyle}"
+                                            HorizontalAlignment="Right" Click="OnToggleLog"/>
+                                </Grid>
+                                <ScrollViewer x:Name="LogScroll" Height="0" Visibility="Collapsed" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" Margin="0,8,0,0">
+                                    <ItemsControl ItemsSource="{Binding Logs}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock FontFamily="Cascadia Mono, Consolas" FontSize="11"
+                                                           Foreground="{DynamicResource Text2Brush}"
+                                                           TextTrimming="CharacterEllipsis" TextWrapping="NoWrap">
+                                                    <Run Text="{Binding Time}" Foreground="{DynamicResource Text3Brush}"/><Run Text=" "/><Run Text="{Binding Text}"/>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </StackPanel>
+                        </Border>
+                </StackPanel>
+
+                <StackPanel x:Name="SettingsPanel" Margin="14,14,14,6" VerticalAlignment="Top" Visibility="Collapsed">
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="网络" Style="{StaticResource CardTitleStyle}"/>
+                                <TextBlock Text="UDP 端口" Style="{StaticResource HintStyle}" Margin="0,8,0,5"/>
+                                <TextBox x:Name="PortBox" Style="{StaticResource FieldBoxStyle}" Text="33333"/>
+                                <TextBlock Text="设备 IP（可选，留空自动发现）" Style="{StaticResource HintStyle}" Margin="0,8,0,5"/>
+                                <TextBox x:Name="IpBox" Style="{StaticResource FieldBoxStyle}"/>
+                                <TextBlock Text="设备与电脑需在同一局域网；路由器 AP 隔离或 VPN 会阻断发现"
+                                           Style="{StaticResource HintStyle}" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="启动" Style="{StaticResource CardTitleStyle}"/>
+                                <Grid Margin="0,10,0,0">
+                                    <TextBlock Text="开机自动启动" FontSize="13" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                                    <ToggleButton x:Name="AutoStartSwitch" Style="{StaticResource SwitchStyle}"
+                                                  HorizontalAlignment="Right" Click="OnAutoStartClick"/>
+                                </Grid>
+                                <Grid Margin="0,10,0,0">
+                                    <TextBlock Text="启动后最小化到托盘" FontSize="13" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                                    <ToggleButton x:Name="MinimizeSwitch" Style="{StaticResource SwitchStyle}" HorizontalAlignment="Right" Click="OnMinimizeClick"/>
+                                </Grid>
+                                <Grid Margin="0,10,0,0">
+                                    <TextBlock Text="写入日志文件（logs 目录）" FontSize="13" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                                    <ToggleButton x:Name="LogFileSwitch" Style="{StaticResource SwitchStyle}" HorizontalAlignment="Right" Click="OnLogFileClick"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                            <Grid>
+                                <TextBlock Text="主题" FontSize="13" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ThemeCombo" Width="130" HorizontalAlignment="Right"
+                                          Style="{StaticResource FieldComboStyle}" SelectionChanged="OnThemeChanged">
+                                    <ComboBoxItem Content="跟随系统"/>
+                                    <ComboBoxItem Content="暗色"/>
+                                    <ComboBoxItem Content="亮色"/>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="关于" Style="{StaticResource CardTitleStyle}" Margin="0,0,0,6"/>
+                                <Grid Margin="0,4">
+                                    <TextBlock Text="作者" FontSize="12" Foreground="{DynamicResource Text2Brush}"/>
+                                    <TextBlock Text="CN-P5" FontSize="12" Foreground="{DynamicResource Text2Brush}" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <Grid Margin="0,4">
+                                    <TextBlock Text="微信" FontSize="12" Foreground="{DynamicResource Text2Brush}"/>
+                                    <TextBlock Text="heibai2006" FontSize="12" Foreground="{DynamicResource Text2Brush}" HorizontalAlignment="Right"/>
+                                </Grid>
+                                <Grid Margin="0,4">
+                                    <TextBlock Text="GitHub" FontSize="12" Foreground="{DynamicResource Text2Brush}"/>
+                                    <Button Style="{StaticResource LinkButtonStyle}" HorizontalAlignment="Right"
+                                            Click="OnOpenGithub" ToolTip="在浏览器中打开项目主页">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Width="13" Height="13" Stretch="Uniform"
+                                                  Fill="{DynamicResource AccentBrush}"
+                                                  Data="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                                            <TextBlock Text="CN-P5/ai-passport-voice-assistant" FontSize="12"
+                                                       Foreground="{DynamicResource AccentBrush}"
+                                                       Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                <Grid Margin="0,4">
+                                    <TextBlock Text="版本" FontSize="12" Foreground="{DynamicResource Text2Brush}"/>
+                                    <TextBlock Text="{Binding Version}" FontSize="12" Foreground="{DynamicResource Text2Brush}" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Button Content="返回主界面" Style="{StaticResource GhostButtonStyle}" HorizontalAlignment="Left" Click="OnBackToMain"/>
+                </StackPanel>
+            </Grid>
+
+            <Border Grid.Row="2" BorderBrush="{DynamicResource BorderBrush1}" BorderThickness="0,0.5,0,0" Padding="14,12">
+                <Grid>
+                    <Button Content="设置" HorizontalAlignment="Left" Style="{StaticResource GhostButtonStyle}" Click="OnOpenSettings"/>
+                    <Button Content="{Binding ToggleText}" HorizontalAlignment="Right" IsEnabled="{Binding CanToggle}"
+                            Style="{StaticResource PrimaryButtonStyle}" Click="OnToggle"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
