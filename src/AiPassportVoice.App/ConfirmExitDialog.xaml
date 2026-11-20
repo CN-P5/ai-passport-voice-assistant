@@ -25,11 +25,14 @@
                        Text="退出会停止语音转发，设备端需重新连接；最小化到托盘可保持后台运行。"/>
 
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="取消" Width="106" Style="{StaticResource GhostButtonStyle}"
+                <Button Content="取消" Width="106" Height="36" FontSize="13"
+                        Style="{StaticResource GhostButtonStyle}"
                         Click="OnCancel" Margin="0,0,8,0"/>
-                <Button Content="最小化到托盘" Width="106" Style="{StaticResource MinorButtonStyle}"
+                <Button Content="最小化到托盘" Width="106" Height="36" FontSize="13"
+                        Style="{StaticResource MinorButtonStyle}"
                         Click="OnMinimize" Margin="0,0,8,0"/>
-                <Button Content="退出" Width="106" Style="{StaticResource PrimaryButtonStyle}"
+                <Button Content="退出" Width="106" Height="36" FontSize="13"
+                        Style="{StaticResource PrimaryButtonStyle}"
                         Click="OnExit"/>
             </StackPanel>
         </Grid>

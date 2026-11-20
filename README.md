@@ -20,6 +20,17 @@ AI Passport 设备 ──UDP 33333──▶ 本程序
 
 程序不参与语音识别，只做两件事：**替你在电脑上按住语音热键**，以及**把设备麦克风的音频送进虚拟声卡**。
 
+## 关联项目
+
+### [my-passport-os](https://github.com/CN-P5/my-passport-os) — 设备端固件
+
+运行在 AI Passport 硬件上的固件项目，负责设备侧的实现与网络通信。
+
+与本项目的关系：**一个是设备端，一个是电脑端，配套使用。** 设备通过固件把按键事件和语音音频发到局域网，本助手接收后注入输入法热键并写入虚拟声卡，两边共同构成完整的「按住说话」链路。
+
+- 固件仓库：https://github.com/CN-P5/my-passport-os
+- 电脑端：本项目，[Releases](https://github.com/CN-P5/ai-passport-voice-assistant/releases) 下载
+
 ## 功能
 
 - 自动发现局域网内的设备，断线自动重连
@@ -136,17 +147,6 @@ dotnet publish src/AiPassportVoice.App/AiPassportVoice.App.csproj `
 ```powershell
 dotnet run --project tests/AiPassportVoice.SelfTest
 ```
-
-## 关联项目
-
-### [my-passport-os](https://github.com/CN-P5/my-passport-os) — 设备端固件
-
-运行在 AI Passport 硬件上的固件项目，负责设备侧的实现与网络通信。
-
-与本项目的关系：**一个是设备端，一个是电脑端，配套使用。** 设备通过固件把按键事件和语音音频发到局域网，本助手接收后注入输入法热键并写入虚拟声卡，两边共同构成完整的「按住说话」链路。
-
-- 固件仓库：https://github.com/CN-P5/my-passport-os
-- 电脑端：本项目，[Releases](https://github.com/CN-P5/ai-passport-voice-assistant/releases) 下载
 
 ## 致谢
 
