@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 使用文档与常见问题
+    url: https://github.com/CN-P5/ai-passport-voice-assistant#readme
+    about: 配置顺序、模式选择、热键被占用等问题先看这里
+  - name: 下载最新版本
+    url: https://github.com/CN-P5/ai-passport-voice-assistant/releases
+    about: Release 页面，下载 AiPassportVoice.exe
+  - name: 参与贡献
+    url: https://github.com/CN-P5/ai-passport-voice-assistant/blob/main/CONTRIBUTING.md
+    about: 构建方式、代码结构与提交规范

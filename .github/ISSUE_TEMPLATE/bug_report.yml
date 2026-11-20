@@ -1,0 +1,84 @@
+name: 问题反馈
+description: 报告一个可复现的问题
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提 Issue 前请先看 [README 的「配置顺序」与「常见问题」](https://github.com/CN-P5/ai-passport-voice-assistant#配置顺序重要)，
+        很多"按了没反应"是热键和输入法不一致导致的。
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 问题描述
+      description: 实际发生了什么？你期望的是什么？
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 打开程序，热键设为右 Alt
+        2. 设备进入 AI 语音
+        3. 按住 UP 说话
+        4. 输入框没有反应
+    validations:
+      required: true
+
+  - type: input
+    id: ime
+    attributes:
+      label: 使用的输入法
+      placeholder: 微信输入法 / 微软拼音 / 豆包输入法 / 搜狗拼音
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: 热键模式
+      options:
+        - 按住说话（hold）
+        - 点击切换（tap）
+    validations:
+      required: true
+
+  - type: dropdown
+    id: cable
+    attributes:
+      label: VB-CABLE 状态
+      options:
+        - 已安装，且重启过电脑
+        - 已安装，但没有重启
+        - 未安装
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: 系统版本
+      placeholder: Windows 11 23H2 x64
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 运行日志
+      description: 粘贴程序 `logs\app-YYYYMMDD.log` 的相关片段。请先隐去设备 IP 等隐私信息。
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: 补充信息
+      description: 截图、错误弹窗、其他线索
+    validations:
+      required: false
